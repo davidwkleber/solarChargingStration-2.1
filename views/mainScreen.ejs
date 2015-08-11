@@ -1,0 +1,855 @@
+
+<!doctype html>
+<html lang="en">
+    <head>
+			<script type="text/javascript" src="/javascripts/addShadeToData.js"></script>
+
+		<script type="text/javascript" src="/javascripts/JSON2TSV.js"></script>
+				<script type="text/javascript" src="/javascripts/dataSocket.js"></script>
+
+		<script type="text/javascript" src="/javascripts/recordScript.js"></script>
+        <meta charset="utf-8">
+        <title>Dummy Load</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="stylesheets/bootstrap.css" rel="stylesheet" type="text/css"/>
+		
+		<style>
+      
+      body{
+        background-image: url("images/retina_wood.png");
+        overflow:hidden;
+      }
+ 
+      .jumbotron {
+        background-color: #eee;
+        border-style: solid;
+        border-color: #fff;
+        border-width: 20px;
+        max-height: 770px;
+        min-height: 770px;
+        box-shadow: 0px 3px 8px rgba(0,0,0,0.42);
+        -webkit-box-shadow: 0px 3px 8px rgba(0,0,0,0.42);
+      }
+
+			.jumbotron-menu {
+        background-color: #eee;
+        border-style: solid;
+        border-color: #fff;
+        border-width: 20px;
+        max-height: 770px;
+			  min-height: 300px;
+      }
+
+      .stop{
+        position:absolute;
+        top:665px;
+        left:70px;
+        box-shadow: 0px 3px 8px rgba(0,0,0,0.42);
+        -webkit-box-shadow: 0px 3px 8px rgba(0,0,0,0.42);
+      }
+			
+      .rec{
+        position:absolute;
+        top:665px;
+        left:180px;
+        border-radius: 100px;
+        box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.42);
+        -webkit-box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.42);
+
+      }
+
+      .sun{
+        position:absolute;
+        top: 20px;
+        left: 1000px;
+      }
+
+      .batt-container {
+        margin-top: 205px;
+        margin-left: 370px;
+        padding-top: 0px;
+      }
+
+      .vertical {
+        display: inline-block;
+        width: 200px;
+        height: 105px;
+        border: 5px solid #000000;
+        webkit-transform: rotate(-90deg);
+        transform: rotate(-90deg);
+        box-shadow: inset 0px 4px 6px #ccc;
+      }
+
+      .vertical:before {
+        content:"";
+        width: 15px;
+        height: 40px;
+        background-color:#000000;
+        margin-top: 30px;
+        margin-left: 193px;
+        border: 0px solid #f1f1f1;
+        position:absolute;
+        border-bottom-right-radius: 2px;
+        border-top-right-radius: 2px;
+      }
+
+      .progress-bar {
+        box-shadow: inset 0px 4px 6px  rgba(100,100,100,0.5);
+      }
+
+      p.rotate {
+        position: absolute;
+        top: 11px;
+        left: 11px;
+        font-size:30px;
+        padding-left:40px;
+        padding-top:30px;
+        color: white;
+        text-shadow: 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black, 0 0 4px black;
+        -webkit-transform: rotate(90deg); /* Chrome, Safari, Opera */
+        transform: rotate(90deg);
+      }
+			
+            
+			@font-face { font-family: Digital; src: url('fonts/digital-7.ttf'); 
+			}
+			
+			.meter{
+				font-family: Digital;
+				color: red;
+				background-color: black;
+				font-size: 20px;
+				z-index:1;
+			}
+			
+      .poly{
+				position: relative;
+				left: -8px;
+				top: 98px;
+				box-shadow: 0px 10px 8px -5px rgba(0,0,0,0.42);
+				-webkit-box-shadow: 0px 10px 8px -5px rgba(0,0,0,0.42);
+				z-index:1;
+      }
+			
+			.thin{
+        position:relative;
+        left: -10px;
+				top: 98px;
+				box-shadow: 0px 10px 8px -5px rgba(0,0,0,0.42);
+				-webkit-box-shadow: 0px 10px 8px -5px rgba(0,0,0,0.42);
+				z-index:1;
+      }
+            
+      .mono{
+        position:relative;
+        left: -12px;
+			  top: 98px;
+			  box-shadow: 0px 10px 8px -5px rgba(0,0,0,0.42);
+			  -webkit-box-shadow: 0px 10px 8px -5px rgba(0,0,0,0.42);
+			  z-index:1;
+      }
+			
+			.cc{
+        position:absolute;
+        top: 418px;
+      }
+            
+      .inverter{
+        position:relative;
+        left: 565px;
+        top: -210px;
+      }
+
+       .cable{
+        position:absolute;
+        left: 618px;
+        top: 620px;
+      }
+			
+			.label-intensity{
+        position:absolute;
+        left: 1150px;
+        top: 45px;
+      }
+			
+			.label-temperaturePoly{
+        position:absolute;
+        left: 650px;
+        top: 150px;
+        z-index: 3;
+      }
+      
+      .label-temperatureThin{
+        position:absolute;
+        left: 650px;
+        top: 245px;
+        z-index: 3;
+      }
+      
+      .label-temperatureMono{
+        position:absolute;
+        left: 650px;
+        top: 340px;
+        z-index: 3;
+      }
+			
+			.meter-vPoly{
+        position:absolute;
+        left: 110px;
+        top: 25px;
+      }
+			
+      .meter-iPoly{
+        position:absolute;
+        left: 110px;
+        top: 71px;
+      }
+      
+      .meter-pPoly{
+        position:absolute;
+        left: 110px;
+        top: 118px;
+      }
+
+			.reading-vPoly{
+				position:absolute;
+				left: 127px;
+				top: 35px;
+				width: 60px;
+				height: 25px;
+				z-index: 2;
+			}
+
+      .reading-iPoly{
+        position:absolute;
+        left: 127px;
+        top: 82px;
+        width: 60px;
+        height: 25px;
+        z-index: 2;
+      }
+
+      .reading-pPoly{
+        position:absolute;
+        left: 127px;
+        top: 128px;
+        width: 60px;
+        height: 25px;
+        z-index: 2;
+      }
+
+      .meter-vThin{
+        position:absolute;
+        left: 250px;
+        top: 25px;
+      }
+      
+      .meter-iThin{
+        position:absolute;
+        left: 250px;
+        top: 71px;
+      }
+      
+      .meter-pThin{
+        position:absolute;
+        left: 250px;
+        top: 118px;
+      }
+
+      .reading-vThin{
+        position:absolute;
+        left: 267px;
+        top: 35px;
+        width: 60px;
+        height: 25px;
+        z-index: 2;
+      }
+
+      .reading-iThin{
+        position:absolute;
+        left: 267px;
+        top: 82px;
+        width: 60px;
+        height: 25px;
+        z-index: 2;
+      }
+
+      .reading-pThin{
+        position:absolute;
+        left: 267px;
+        top: 128px;
+        width: 60px;
+        height: 25px;
+        z-index: 2;
+      }
+      
+      .meter-vMono{
+        position:absolute;
+        left: 385px;
+        top: 25px;
+      }
+      
+      .meter-iMono{
+        position:absolute;
+        left: 385px;
+        top: 71px;
+      }
+      
+      .meter-pMono{
+        position:absolute;
+        left: 385px;
+        top: 118px;
+      }
+
+      .reading-vMono{
+        position:absolute;
+        left: 402px;
+        top: 35px;
+        width: 60px;
+        height: 25px;
+        z-index: 2;
+      }
+
+      .reading-iMono{
+        position:absolute;
+        left: 402px;
+        top: 82px;
+        width: 60px;
+        height: 25px;
+        z-index: 2;
+      }
+
+      .reading-pMono{
+        position:absolute;
+        left: 402px;
+        top: 128px;
+        width: 60px;
+        height: 25px;
+        z-index: 2;
+      }
+
+      .label-warning{
+        background-color: #F3DF03;
+      }
+
+      .bike{
+        position: absolute;
+        left: 859px;
+        top: 450px;
+      }
+
+
+      .cablebike{
+        position: absolute;
+        left: 816px;
+        top: 620px;
+      }
+
+
+
+      .horizontalbar {
+        position: absolute;
+        width: 135px;
+        height: 35px;
+        background: #2F4F4F;
+        border-radius: 10px;
+        z-index: 3;
+        top: 300px;
+        left: 800px;
+      }
+
+      .horizontalbar.is-dragging { opacity: 0.7; }
+
+      .verticalbar {
+        position: absolute;
+        width: 35px;
+        height: 125px;
+        background: #2F4F4F;
+        border-radius: 10px;
+        z-index: 3;
+        top: 300px;
+        left: 800px;
+      }
+
+      .verticalbar.is-dragging { opacity: 0.7; }
+
+      .square {
+        position: absolute;
+        width: 35px;
+        height: 35px;
+        background: #2F4F4F;
+        border-radius: 10px;
+        z-index: 3;
+        top: 300px;
+        left: 750px;
+      }
+
+      .square.is-dragging { opacity: 0.7; }
+
+      .branch {
+        position: absolute;
+        width: 141px;
+        height: 55px;
+        z-index: 3;
+        top: 350px;
+        left: 750px;
+      }
+
+      .branch.is-dragging { opacity: 0.7; }
+
+      .temp_ind1 {
+        position: absolute;
+        z-index: 2;
+        width: 224px;
+        height: 22px;
+        top: 180px;
+        left: 480px;
+      }
+
+      .temp_ind2 {
+        position: absolute;
+        z-index: 2;
+        width: 399px;
+        height: 112px;
+        top: 180px;
+        left: 340px;
+      }
+
+      .temp_ind3 {
+        position: absolute;
+        z-index: 2;
+        width: 559px;
+        height: 209px;
+        top: 180px;
+        left: 200px;
+      }
+        
+    </style>
+
+    </head>
+    <body>
+			
+		<script src="javascripts/jquery/jquery.js" type="text/javascript"></script>
+		<script src="javascripts/jquery/jquery-ui.js" type="text/javascript"></script>
+		<script src="javascripts/jquery/sevenSeg.js" type="text/javascript"></script>
+    <script src="javascripts/bootstrap.js" type="text/javascript"></script>
+    <script src="javascripts/draggabilly.pkgd.js"></script>
+	
+        <div class="container-fluid">
+                <nav class="navbar navbar-default">
+                  <div class="container-fluid">
+                    <div class="navbar-header">
+                      <a class="navbar-brand" href="#">Solar Charging Station</a>
+                    </div>
+                    <div>
+                      <ul class="nav navbar-nav">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Components</a></li>
+                        <li class="active"><a href="#">Experiments</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </nav>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="jumbotron">
+                        <div class="text-center">
+                        <div class="btn-group-vertical" data-toggle="buttons">
+                            <label class="btn btn-primary btn-lg"  id="btnIntensity">
+                              <input type="checkbox"> Intensity
+                            </label>
+                            <br>
+                            <label class="btn btn-primary btn-lg" id="btnTemperature">
+                              <input type="checkbox"> Temperature
+                            </label>
+                            <br>
+                            <label class="btn btn-primary btn-lg" id="btnShading">
+                              <input type="checkbox"> Shading
+                            </label>
+                            <br>  
+                            <!-- Shading dropdown Dropdown -->
+                            <div class="dropdown">
+                              <button style="display:none" class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                Shading Element
+                                <span class="caret"></span>
+                              </button>
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li value="1"><a href="#">Square</a></li>
+                                <li><a href="#">Vertical bar</a></li>
+                                <li><a href="#">Horizontal bar</a></li>
+                                <li><a href="#">Branch</a></li>
+                              </ul>
+                            </div>
+
+                        </div>
+                        </div>
+
+                      <!-- Rec & Stop Buttons -->
+                      <input type ="image" class="stop" src="images/stop.png" alt="" onclick="saveDataFunction()" />
+                      <input type="image" class="rec" src="images/rec.png" alt"" onclick="recordFunction()" />  
+
+                    </div>
+                </div>
+                <div class="col-md-10">
+                  <div class="jumbotron">
+                    <div class="Diagram">
+
+                    <!--Polycrystalline Module  -->
+                      <img class="poly" src="images/poly.png" width="137" height="279" alt=""/>
+                      
+                      <img class="meter-vPoly" src="images/meter.png" width="100" height="45" alt=""/>
+                      <div id="vPoly" class="reading-vPoly meter">Error</div> <!-- "Error" as default message in case Arduino communication fails-->
+
+                      <img class="meter-iPoly" src="images/meter.png" width="100" height="45" alt=""/>
+                      <div id="iPoly" class="reading-iPoly meter">Error</div>
+
+                      <img class="meter-pPoly" src="images/meter.png" width="100" height="45" alt=""/>
+                      <div id="pPoly" class="reading-pPoly meter">Error</div>
+
+                    <!-- Thin-film Module -->
+                      <img class="thin" src="images/thinfilm.png" width="137" height="279" alt=""/>
+
+                      <img class="meter-vThin" src="images/meter.png" width="100" height="45" alt=""/>
+                      <div id="vThin" class="reading-vThin meter">Error</div> <!-- "Error" as default message in case Arduino communication fails-->
+
+                      <img class="meter-iThin" src="images/meter.png" width="100" height="45" alt=""/>
+                      <div id="iThin" class="reading-iThin meter">Error</div>
+
+                      <img class="meter-pThin" src="images/meter.png" width="100" height="45" alt=""/>
+                      <div id="pThin" class="reading-pThin meter">Error</div>
+
+                    <!-- Monocrystalline Module -->
+                      <img class="mono" src="images/mono.png" width="137" height="279" alt=""/>
+
+                      <img class="meter-vMono" src="images/meter.png" width="100" height="45" alt=""/>
+                      <div id="vMono" class="reading-vMono meter">Error</div> <!-- "Error" as default message in case Arduino communication fails-->
+
+                      <img class="meter-iMono" src="images/meter.png" width="100" height="45" alt=""/>
+                      <div id="iMono" class="reading-iMono meter">Error</div>
+
+                      <img class="meter-pMono" src="images/meter.png" width="100" height="45" alt=""/>
+                      <div id="pMono" class="reading-pMono meter">Error</div>
+
+                    <!-- Charge Controllers & Cables   -->
+                      <br>
+                      <img class="cc" src="images/cc2.gif" width="420" height="327" alt=""/>
+
+                    <!-- Battery -->
+                      <div class="batt-container">
+                        <div class="progress vertical">
+                          <div class="progress-bar progress-bar-success progress-bar-striped active bar" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" style="width: 0%"><p class="rotate" id="battery">ERR</p>
+                          </div>  
+                        </div>
+                      </div>
+
+                    <!-- Connection between Battery and Inverter -->
+                      <img class="cable" src="images/cable2.gif" alt=""/>
+
+                    <!-- Inverter -->
+                      <img class="inverter" src="images/inverter.gif" width="156" height="258" alt=""/>
+
+                    <!-- Labels -->
+          						<h1><span class="label label-warning label-intensity" style="display:none" id="showIntensity">Intensity </span></h1>
+                      
+          						<h1><span class="label label-danger label-temperaturePoly" style="display:none" id="showTemperaturePoly">Temperature </span></h1>
+                      <h1><span class="label label-danger label-temperatureThin" style="display:none" id="showTemperatureThin">Temperature </span></h1>
+                      <h1><span class="label label-danger label-temperatureMono" style="display:none" id="showTemperatureMono">Temperature </span></h1>
+
+                    <!-- Sun -->
+                      <img class="sun" src="images/sunw.gif" alt=""/>
+
+                    <!-- Bike -->
+                      <img class="bike" src="images/bike.png" width="462" height="269" alt=""/>
+
+                    <!-- Connection between Battery and Bike -->
+                      <img class="cablebike" src="images/cablebike.gif" height="21" width="43" alt=""/>
+
+                    <!-- Draggables -->
+                      <div class="verticalbar" style="display:none" id="showVertical"></div>
+                      <div class="horizontalbar" style="display:none" id="showHorizontal"></div>
+                      <div class="square" style="display:none" id="showSquare"></div>
+                      <img class="branch" style="display:none" src="images/branch.png" id="showBranch" alt="" />
+
+                    <!-- Temperature Indicators-->
+                      <img class="temp_ind1" id="showTempInd1" style="display:none" src="images/temp_ind1.png" alt="" />
+                      <img class="temp_ind2" id="showTempInd2" style="display:none" src="images/temp_ind2.png" alt="" />
+                      <img class="temp_ind3" id="showTempInd3" style="display:none" src="images/temp_ind3.png" alt="" /> 
+
+                    </div>               
+                  </div>
+                </div>
+            </div>
+        </div>
+	
+	
+<div class="dummyLoadDiv">
+<form name="dummyLoadForm" id"dummyLoadForm" class="dummyLoadForm" action="/dummyLoad" method="post">
+
+      <script>
+			var recordDataItem;
+       shadingStatus = "No shading";
+					
+			var datasocket = io.connect('http://127.0.0.1:1337');
+      var $bar = $('.bar');
+
+			$(document).ready(function(){
+								
+				$( "#btnIntensity").click(function() {
+				  $( "#showIntensity" ).toggle();
+				});
+				
+				$( "#btnTemperature").click(function() {
+				  $( "#showTemperaturePoly" ).toggle();
+          $( "#showTemperatureThin" ).toggle();
+          $( "#showTemperatureMono" ).toggle();
+          $( "#showTempInd1" ).toggle();
+          $( "#showTempInd2" ).toggle();
+          $( "#showTempInd3" ).toggle();
+				});
+
+        $( "#btnShading").click(function() {
+          $( "#dropdownMenu1" ).toggle();
+          $( "#showSquare" ).hide();
+          $( "#showHorizontal" ).hide();
+          $( "#showBranch" ).hide();
+          $( "#showVertical" ).hide();
+
+        });
+
+        $('.dropdown-menu li a').click(function() {
+          if ($(this).text() == "Square"){
+            $( "#showSquare" ).show();
+            $( "#showHorizontal" ).hide();
+            $( "#showBranch" ).hide();
+            $( "#showVertical" ).hide();
+          }
+
+          if ($(this).text() == "Horizontal bar"){
+            $( "#showHorizontal" ).show();
+            $( "#showSquare" ).hide();
+            $( "#showBranch" ).hide();
+            $( "#showVertical" ).hide();
+          }
+
+          if ($(this).text() == "Branch"){
+            $( "#showHorizontal" ).hide();
+            $( "#showSquare" ).hide();
+            $( "#showBranch" ).show();
+            $( "#showVertical" ).hide();
+          }
+
+          if ($(this).text() == "Vertical bar"){
+            $( "#showHorizontal" ).hide();
+            $( "#showSquare" ).hide();
+            $( "#showBranch" ).hide();
+            $( "#showVertical" ).show();
+          }
+
+        });
+
+      });
+        
+        //Draggable variables
+        var square = new Draggabilly('.square');
+        var squareStyle = document.getElementById('showSquare').style;
+        var horizontal = new Draggabilly('.horizontalbar');
+        var horizontalStyle = document.getElementById('showHorizontal').style;
+        var vertical = new Draggabilly('.verticalbar');
+        var verticalStyle = document.getElementById('showVertical').style;
+        var branch = new Draggabilly('.branch');
+        var branchStyle = document.getElementById('showBranch').style;
+
+ //Positioning of Square as shading element   
+    //Polycrystalline Module      
+        square.on( 'dragEnd', function() {
+          console.log('Square dragEnd', square.position.x, square.position.y);
+          shadingStatus = "No Shading";
+          //Case 1: half cell is shaded
+          // 70 < x <= 200 and 170 < y <= 240
+          if(square.position.x > 70 && square.position.x <= 200 && square.position.y > 170 && square.position.y <= 240){
+            squareStyle.left = "92px";
+            squareStyle.top = "182px";
+            shadingStatus = "Half Polycrystalline cell shaded by Square";    
+          } ;
+          //Case 2: full cell is shaded
+          // 70 < x <= 200 and 241 < y <= 302
+          if(square.position.x > 70 && square.position.x <= 200 && square.position.y > 241 && square.position.y <= 302){
+            squareStyle.left = "92px";
+            squareStyle.top = "286px"; 
+            shadingStatus = "Full Polycrystalline cell shaded by Square";  
+          } ;
+          //Case 3: four cells are shaded
+          // 70 < x <= 200 and 303 < y <= 363
+          if(square.position.x > 70 && square.position.x <= 200 && square.position.y > 303 && square.position.y <= 363){
+            squareStyle.left = "109px";
+            squareStyle.top = "330px"; 
+            shadingStatus = "Four Polycrystalline cells partly shaded by Square";  
+          } ;
+          //Case 4: two cells are shaded
+          // 70 < x <= 200 and 364 < y <= 424
+          if(square.position.x > 70 && square.position.x <= 200 && square.position.y > 364 && square.position.y <= 424 ){
+            squareStyle.left = "109px";
+            squareStyle.top = "419px";
+            shadingStatus = "Two Polycrystalline cells partly shaded by Square";   
+          } ;
+    //Monocrystalline Module
+          //Case 5: half cell is shaded
+          // 348 < x <= 478 and 170 < y <= 240
+          if(square.position.x > 348 && square.position.x <= 478 && square.position.y > 170 && square.position.y <= 240){
+            squareStyle.left = "370px";
+            squareStyle.top = "182px";  
+            shadingStatus = "Half Monocrystalline cell shaded by Square"; 
+          } ;
+          //Case 6: full cell is shaded
+          // 348 < x <= 478 and 241 < y <= 302
+          if(square.position.x > 348 && square.position.x <= 478 && square.position.y > 241 && square.position.y <= 302){
+            squareStyle.left = "370px";
+            squareStyle.top = "286px";  
+            shadingStatus = "Full Monocrystalline cell shaded by Square";  
+          } ;
+          //Case 7: four cells are shaded
+          // 348 < x <= 478 and 303 < y <= 363
+          if(square.position.x > 348 && square.position.x <= 478 && square.position.y > 303 && square.position.y <= 363){
+            squareStyle.left = "383px";
+            squareStyle.top = "330px"; 
+            shadingStatus = "Four Monocrystalline cells partly shaded by Square";   
+          } ;
+          //Case 8: four cells are shaded
+          // 348 < x <= 478 and 364 < y <= 424
+          if(square.position.x > 348 && square.position.x <= 478 && square.position.y > 364 && square.position.y <= 424 ){
+            squareStyle.left = "383px";
+            squareStyle.top = "419px";  
+            shadingStatus = "Two Monocrystalline cells partly shaded by Square";  
+          } ;
+          console.log(shadingStatus);
+        });
+   
+ //Positioning of Horizontal bar as shading element   
+    //Polycrystalline Module      
+        horizontal.on( 'dragEnd', function() {
+          console.log('Horizontal Bar dragEnd', horizontal.position.x, horizontal.position.y);
+          shadingStatus = "No Shading";
+          //Case 9: full row is shaded
+          // -23 < x <= 149 and 170 < y <= 296
+          if(horizontal.position.x > -23 && horizontal.position.x <= 149 && horizontal.position.y > 170 && horizontal.position.y <= 296){
+            horizontalStyle.left = "90px";
+            horizontalStyle.top = "196px"; 
+            shadingStatus = "Full row of Polycrystalline cells shaded by Horizontal Bar";  
+          } ;
+          //Case 10: two rows are half shaded
+          // -23 < x <= 149 and 241 < y <= 302
+          if(horizontal.position.x > -23 && horizontal.position.x <= 200 && horizontal.position.y > 297 && horizontal.position.y <= 431){
+            horizontalStyle.left = "90px";
+            horizontalStyle.top = "362px";
+            shadingStatus = "Two rows of Polycrystalline cells partly shaded by Horizontal Bar";
+          }   
+    //Monocrystalline Module
+          //Case 11: full row is shaded
+          // 288 < x <= 486 and 170 < y <= 296
+          if(horizontal.position.x > 288 && horizontal.position.x <= 486 && horizontal.position.y > 170 && horizontal.position.y <= 296){
+            horizontalStyle.left = "367px";
+            horizontalStyle.top = "196px";   
+            shadingStatus = "Full row of Monocrystalline cells shaded by Horizontal Bar"; 
+          } ;
+          //Case 12: two rows are half shaded
+          // 288 < x <= 486 and 241 < y <= 302
+          if(horizontal.position.x > 288 && horizontal.position.x <= 486 && horizontal.position.y > 297 && horizontal.position.y <= 431){
+            horizontalStyle.left = "367px";
+            horizontalStyle.top = "362px";
+            shadingStatus = "Two rows of Monocrystalline cells partly shaded by Horizontal Bar";
+          }  
+          console.log(shadingStatus);
+        });
+        
+ //Positioning of Vertical bar as shading element   
+    //Polycrystalline Module      
+        vertical.on( 'dragEnd', function() {
+          console.log('Vertical Bar dragEnd', vertical.position.x, vertical.position.y);
+          shadingStatus = "No Shading";
+          //Case 13: full column is shaded
+          // 69 < x <= 203 and 82 < y <= 246
+          if(vertical.position.x > 69 && vertical.position.x <= 203 && vertical.position.y > 82 && vertical.position.y <= 246){
+            verticalStyle.left = "90px";
+            verticalStyle.top = "196px"; 
+            shadingStatus = "Full column of Polycrystalline cells shaded by Vertical Bar"; 
+          } ;
+          //Case 14: two columns are half shaded
+          // 69 < x <= 203 and 247 < y <= 426
+          if(vertical.position.x > 69 && vertical.position.x <= 203 && vertical.position.y > 247 && vertical.position.y <= 426){
+            verticalStyle.left = "108px";
+            verticalStyle.top = "317px";
+            shadingStatus = "Two columns of Polycrystalline cells partly shaded by Vertical Bar"; 
+          }   
+    //Monocrystalline Module
+          //Case 15: full row is shaded
+          // 345 < x <= 485 and 82 < y <= 246
+          if(vertical.position.x > 345 && vertical.position.x <= 485 && vertical.position.y > 82 && vertical.position.y <= 246){
+            verticalStyle.left = "370px";
+            verticalStyle.top = "196px"; 
+            shadingStatus = "Full column of Monocrystalline cells shaded by Vertical Bar";   
+          } ;
+          //Case 16: two rows are half shaded
+          // 345 < x <= 485 and 247 < y <= 426
+          if(vertical.position.x > 345 && vertical.position.x <= 485 && vertical.position.y > 247 && vertical.position.y <= 426){
+            verticalStyle.left = "386px";
+            verticalStyle.top = "317px";
+            shadingStatus = "Two columns of Monocrystalline cells partly shaded by Vertical Bar"; 
+          }  
+          console.log(shadingStatus);
+        });
+  //End of shading elements
+
+			datasocket.on('connect', function (data) {
+				//	console.log('record client connected ');
+				//	console.log('record connected data ' + data);
+			
+				jQuery(function ($) {
+					datasocket.on('updateData', function (data) {
+						// console.log('record update raw: ' + data);
+
+							recordDataItem = JSON.parse(data);
+							document.getElementById("showIntensity").innerHTML = recordDataItem.L_wm2 + ' W/m2';
+							
+              document.getElementById("vPoly").innerHTML = recordDataItem.U_poly + ' V';
+              document.getElementById("iPoly").innerHTML = recordDataItem.I_poly + ' A';
+              document.getElementById("pPoly").innerHTML = recordDataItem.P_poly + ' W';
+
+              document.getElementById("vThin").innerHTML = recordDataItem.U_thin + ' V';
+              document.getElementById("iThin").innerHTML = recordDataItem.I_thin + ' A';
+              document.getElementById("pThin").innerHTML = recordDataItem.P_thin + ' W';
+
+              document.getElementById("vMono").innerHTML = recordDataItem.U_mono + ' V';
+              document.getElementById("iMono").innerHTML = recordDataItem.I_mono + ' A';
+              document.getElementById("pMono").innerHTML = recordDataItem.P_mono + ' W';
+							
+              document.getElementById("showTemperaturePoly").innerHTML = recordDataItem.T_poly + ' °C';
+              document.getElementById("showTemperatureThin").innerHTML = recordDataItem.T_thin + ' °C';
+              document.getElementById("showTemperatureMono").innerHTML = recordDataItem.T_mono + ' °C';
+
+              document.getElementById("battery").innerHTML = recordDataItem.B_soc + ' %';
+              $bar.width(recordDataItem.B_soc*2);
+
+							console.log('record updateData.L_wm2  ' + recordDataItem.L_wm2);
+						 	console.log('record updateData.T_mono  ' + recordDataItem.T_mono);
+						 	console.log('record updateData.T_thin  ' + recordDataItem.T_thin);
+						 	console.log('record updateData.T_poly  ' + recordDataItem.T_poly);
+						 	console.log('record updateData.U_mono  ' + recordDataItem.U_mono);
+						 	console.log('record updateData.U_thin  ' + recordDataItem.U_thin);
+						 	console.log('record updateData.U_poly  ' + recordDataItem.U_poly);
+						 	console.log('record updateData.I_mono  ' + recordDataItem.I_mono);
+						 	console.log('record updateData.I_thin  ' + recordDataItem.I_thin);
+						 	console.log('record updateData.I_poly  ' + recordDataItem.I_poly);
+						 	console.log('record updateData.P_mono  ' + recordDataItem.P_mono);
+						 	console.log('record updateData.P_thin  ' + recordDataItem.P_thin);
+						 	console.log('record updateData.P_poly  ' + recordDataItem.P_poly);
+
+					});	
+			
+				});  
+			});	
+				
+        </script>
+ </form>
+	</div>
+    </body>
+</html>
